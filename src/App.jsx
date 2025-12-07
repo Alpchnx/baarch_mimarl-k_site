@@ -68,7 +68,7 @@ export default function App() {
     <div className="app">
       <Navbar currentPath={route} onNavigate={navigate} />
       <main>{content}</main>
-      <Footer />
+      {route !== "/" && <Footer />}
     </div>
   );
 }
