@@ -199,7 +199,7 @@ export default function ProductDetail({ slug, onNavigate }) {
                 </span>
               </div>
               <div className="product-info-block">
-                <span className="product-info-block-label">Üretim Süresi</span>
+                <span className="product-info-block-label">Teslim Süresi</span>
                 <span className="product-info-block-value">
                   {product.productionTime}
                 </span>

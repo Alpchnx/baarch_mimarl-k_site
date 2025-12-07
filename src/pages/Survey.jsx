@@ -3,23 +3,27 @@ import React, { useState, useEffect } from "react";
 const styleDescriptions = {
   industrial: {
     title: "Cesur ve Özgün Endüstriyel Loft",
+    keywords: "Ham, Dürüst, Karakterli, Fonksiyonel.",
     description:
-      "Ham, Dürüst, Karakterli, Fonksiyonel… Endüstriyel tasarım, mekânın ham halini güzelleştirir. Açık tavanlar, tuğla duvarlar, metal detaylar ve geniş pencerelerle karakterli bir yaşam alanı yaratır. Bu stil, geçmişin izlerini gelecekle buluşturur ve her köşede hikâye anlatır.",
+      "Sen, hikayesi olan mekanları seviyorsun. Sıvaları dökülmüş bir tuğla duvar ya da görünürdeki tesisat boruları senin için bir kusur değil, tasarımın kendisi. Metal, beton ve işlenmemiş ahşabın soğuk-sıcak dengesiyle ruhunu besliyorsun. Yaşam alanında maksimum işlevsellik ve minimum gösteriş arayanlardansın.",
   },
   midcentury: {
     title: "Sıcak ve Zamansız Mid-Century Modern",
+    keywords: "Organik, Retro, Oyunbaz, Akışkan.",
     description:
-      "1950'lerin zarif çizgileri, doğal ahşap tonları ve organik formlarla buluşur. Mid-Century Modern, fonksiyonelliği estetikle birleştiren, zamansız bir yaklaşımdır. Sıcak renkler, yumuşak kumaşlar ve ikonik mobilya parçalarıyla rahat ve sofistike bir atmosfer yaratır.",
+      "Seni en iyi 1950'lerin neşesi ve İskandinav sadeliğinin birleşimi tanımlar. Eğrilerin hakim olduğu sehpa ayakları, teak ağacının sıcaklığı ve hardal sarısı, zeytin yeşili gibi doğadan ilham alan renkler sana huzur verir. Mekanlarında form ile fonksiyonun kusursuz uyumunu arayan, zamansız ve samimi bir ruha sahipsin.",
   },
   minimalist: {
     title: "Sakin ve Seçici Minimalist",
+    keywords: "Nötr, Sade, Düzenli, Huzurlu.",
     description:
-      "Az, daha fazladır. Minimalist tasarım, gereksiz detayları ayıklayarak mekânın özüne odaklanır. Temiz çizgiler, nötr renkler ve ferah boşluklarla huzurlu bir yaşam alanı oluşturur. Her parça bilinçli seçilir ve mekâna anlam katar.",
+      '"Az, çoktur" felsefesi senin tasarım rehberin. Göz yoran karmaşadan uzaksın; her eşyanın bir anlamı ve işlevi olmalı. Siyah, beyaz ve bej gibi nötr renk paletleri, düz çizgiler ve geniş boş alanlar sana nefes aldırır. Tasarımda dinginliği, ferahlığı ve mükemmel düzeni arayan bir vizyonun var.',
   },
   neoclassical: {
     title: "Görkemli ve Zarif Neoklasik",
+    keywords: "Lüks, Asil, Simetrik, Göz Alıcı.",
     description:
-      "Klasik mimarinin zarafeti, modern konforla buluşur. Neoklasik tasarım, simetri, oran ve detaylara verdiği önemle görkemli bir atmosfer yaratır. Mermer, altın detaylar ve lüks kumaşlarla zamansız bir sofistikasyon sunar.",
+      "Sen, lüksü seven ancak bunu abartıdan uzak, dengeli bir zarafetle sunan bir ruha sahipsin. Simetri, mermer dokular, kadife kumaşlar ve altın/pirinç detaylar senin mekanlarında olmazsa olmaz. Klasik mimarinin gücünü, modern dokunuşlarla birleştirerek ihtişamlı ve sofistike bir yaşam alanı yaratmayı seviyorsun.",
   },
 };
 
@@ -235,7 +239,7 @@ export default function Survey({ onNavigate }) {
     }, 500);
   };
 
-  const handleContactSubmit = (e) => {
+  const handleContactSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
 
@@ -257,35 +261,36 @@ export default function Survey({ onNavigate }) {
       return;
     }
 
-    // Form verilerini e-posta ile gönder
-    const emailBody = `
-Anket Sonuçları:
+    try {
+      // answers objesini array formatına dönüştür
+      const answersArray = Object.values(answers).map((answer) => ({
+        question: answer.question,
+        answer: answer.answer,
+      }));
 
-İletişim Bilgileri:
-Ad Soyad: ${contactData.name}
-Telefon: ${contactData.phone}
-E-posta: ${contactData.email || "Belirtilmemiş"}
+      const response = await fetch("https://baarchmimarlik.com/api/save.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contact: contactData,
+          answers: answersArray,
+          detectedStyle: detectedStyle,
+        }),
+      });
 
-Anket Cevapları:
-${Object.entries(answers)
-  .map(([id, data]) => `${id}. ${data.question}\n   Cevap: ${data.answer}`)
-  .join("\n\n")}
+      const result = await response.json();
 
-Tespit Edilen Stil: ${
-      detectedStyle ? styleDescriptions[detectedStyle].title : "Belirlenemedi"
+      if (result.success) {
+        // Sonuç ekranına geç
+        setCurrentQuestion(questions.length + 1);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        throw new Error(result.error || "Kayıt başarısız");
+      }
+    } catch (error) {
+      console.error("API kayıt hatası:", error);
+      alert("Bir hata oluştu. Lütfen tekrar deneyin.");
     }
-    `.trim();
-
-    const mailtoLink = `mailto:baarchmimarlik@gmail.com?subject=Tarzını Keşfet Anketi&body=${encodeURIComponent(
-      emailBody
-    )}`;
-    window.location.href = mailtoLink;
-
-    // Sonuç ekranına geç
-    setTimeout(() => {
-      setCurrentQuestion(questions.length + 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }, 100);
   };
 
   const handleInputChange = (e) => {
@@ -311,9 +316,17 @@ Tespit Edilen Stil: ${
         <div className="survey-container">
           <div className="survey-result-content">
             <div className="survey-result-header">
-              <h1 className="survey-result-title">Senin Tarzın:</h1>
+              <h1 className="survey-result-title">İşte Senin Tarzın</h1>
               <h2 className="survey-result-style">{styleInfo.title}</h2>
             </div>
+            {styleInfo.keywords && (
+              <div className="survey-result-keywords">
+                <h3 className="survey-keywords-title">
+                  Senin Tarzını Anlatan Kelimeler
+                </h3>
+                <p className="survey-keywords-text">{styleInfo.keywords}</p>
+              </div>
+            )}
             <p className="survey-result-description">{styleInfo.description}</p>
             <button
               className="survey-cta-button"

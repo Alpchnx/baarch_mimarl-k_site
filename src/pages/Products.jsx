@@ -98,7 +98,7 @@ export default function Products({ onNavigate }) {
     <section className="products-section">
       <div className="products-hero">
         <div className="container">
-          <h1 className="products-hero-title">imza tasarımlar</h1>
+          <h1 className="products-hero-title">İmza Tasarımlar</h1>
           <div className="products-hero-content">
             <h2 className="products-hero-subtitle">Bloom Serisi</h2>
             <div className="products-hero-description">
@@ -173,7 +173,7 @@ export default function Products({ onNavigate }) {
           </div>
           <div className="products-coming-soon" ref={addToRefs}>
             <p className="products-coming-soon-text">
-              DOLCE VITA SERIES YAKINDA...
+              DOLCE VITA SERİSİ YAKINDA...
             </p>
           </div>
         </div>
