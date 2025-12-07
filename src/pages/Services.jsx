@@ -93,6 +93,7 @@ export default function Services() {
   const processRefs = useRef([]);
   // Birden fazla adımın açık kalabilmesi için liste halinde tutulur
   const [expandedSteps, setExpandedSteps] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
   const [touchedCard, setTouchedCard] = useState(null);
 
   useEffect(() => {
@@ -124,6 +125,16 @@ export default function Services() {
     };
   }, []);
 
+  // Ekran genişliğine göre mobil/destekli davranışı belirle
+  useEffect(() => {
+    const updateIsMobile = () => {
+      setIsMobile(typeof window !== "undefined" && window.innerWidth <= 768);
+    };
+    updateIsMobile();
+    window.addEventListener("resize", updateIsMobile);
+    return () => window.removeEventListener("resize", updateIsMobile);
+  }, []);
+
   const addToRefs = (el) => {
     if (el && !cardRefs.current.includes(el)) {
       cardRefs.current.push(el);
@@ -137,6 +148,7 @@ export default function Services() {
   };
 
   const toggleStep = (stepId) => {
+    if (isMobile) return; // Mobilde buton davranışı olmasın, her zaman açık
     setExpandedSteps((prev) =>
       prev.includes(stepId)
         ? prev.filter((id) => id !== stepId)
@@ -191,7 +203,7 @@ export default function Services() {
             <div
               key={step.id}
               className={`process-timeline-item ${
-                expandedSteps.includes(step.id) ? "expanded" : ""
+                expandedSteps.includes(step.id) || isMobile ? "expanded" : ""
               }`}
               ref={addToProcessRefs}
               onClick={() => toggleStep(step.id)}
