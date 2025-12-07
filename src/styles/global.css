@@ -251,15 +251,16 @@ p {
 }
 
 .navbar .container {
-  padding: 0 60px;
+  /* Logo ve içerikleri biraz daha sola yaklaştırmak için yastığı daralt */
+  padding: 0 40px;
 }
 
 .navbar-home .container {
-  padding: 0 60px;
+  padding: 0 40px;
 }
 
 .navbar-default .container {
-  padding: 0 60px;
+  padding: 0 40px;
 }
 
 .brand {
@@ -278,7 +279,7 @@ p {
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding-left: 24px;
+  padding-left: 0;
   margin-right: 32px;
   transition: transform 0.2s ease;
 }
