@@ -144,6 +144,14 @@ export default function Services() {
     );
   };
 
+  const handleServiceTouch = (serviceId) => {
+    // Mobilde kartlar dokunulabilir davranış göstermesin; yalnızca desktop/large ekranlarda toggling
+    if (typeof window !== "undefined" && window.innerWidth <= 768) {
+      return;
+    }
+    setTouchedCard(touchedCard === serviceId ? null : serviceId);
+  };
+
   return (
     <section className="section container">
       <div className="section-head">
@@ -160,9 +168,7 @@ export default function Services() {
             style={{
               backgroundImage: `url(${service.image})`,
             }}
-            onTouchStart={() => {
-              setTouchedCard(touchedCard === service.id ? null : service.id);
-            }}
+            onTouchStart={() => handleServiceTouch(service.id)}
           >
             <div className="service-card-overlay"></div>
             <div className="service-card-number">0{service.id}</div>

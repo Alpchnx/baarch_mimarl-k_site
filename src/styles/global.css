@@ -1156,6 +1156,55 @@ p {
   transform: translateY(-50%);
 }
 
+/* Mobilde kart metinlerinin kaybolmaması için dokunma davranışı */
+@media (max-width: 768px) {
+  .service-card.touched .service-card-title {
+    opacity: 1;
+    transform: translateY(-50%);
+  }
+  .service-card.touched .service-card-description {
+    opacity: 1;
+    transform: translateY(-20%);
+  }
+}
+
+/* Mobilde servis kartlarını statik hale getir; hover/dokunma efektlerini kaldır */
+@media (max-width: 768px) {
+  .service-card {
+    cursor: default;
+    transform: none !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  }
+  .service-card:hover {
+    transform: none;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  }
+  .service-card-title {
+    position: relative;
+    top: auto;
+    transform: none !important;
+    opacity: 1 !important;
+    margin-bottom: 12px;
+    text-align: left;
+  }
+  .service-card-description {
+    position: relative;
+    top: auto;
+    transform: none !important;
+    opacity: 1 !important;
+    margin-top: 8px;
+    max-height: none;
+    white-space: pre-line;
+  }
+  .service-card-overlay {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.92) 0%,
+      rgba(255, 255, 255, 0.86) 100%
+    );
+  }
+}
+
 /* Process Section */
 .process-section {
   margin-top: 100px;
@@ -1385,6 +1434,14 @@ p {
 
 .process-timeline-item.expanded .timeline-description {
   color: #1f1f1f;
+}
+
+@media (max-width: 768px) {
+  .process-timeline-item.expanded {
+    padding: 20px 16px 28px 60px;
+    margin-left: -8px;
+    margin-right: -8px;
+  }
 }
 
 @media (max-width: 768px) {
