@@ -1363,6 +1363,30 @@ p {
   overflow-wrap: break-word;
 }
 
+/* Açık kalan adımların kaybolmaması ve okunabilir kalması için hafif zemin */
+.process-timeline-item.expanded {
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 16px;
+  border: 1px solid rgba(139, 30, 30, 0.08);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.06);
+  padding: 24px 24px 32px 80px;
+  margin-left: -16px;
+  margin-right: -16px;
+  transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.process-timeline-item.expanded .timeline-title {
+  color: #8b1e1e;
+}
+
+.process-timeline-item.expanded .timeline-subtitle {
+  color: rgba(139, 30, 30, 0.75);
+}
+
+.process-timeline-item.expanded .timeline-description {
+  color: #1f1f1f;
+}
+
 @media (max-width: 768px) {
   .process-section {
     margin-top: 80px;

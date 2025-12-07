@@ -91,7 +91,8 @@ const services = [
 export default function Services() {
   const cardRefs = useRef([]);
   const processRefs = useRef([]);
-  const [expandedStep, setExpandedStep] = useState(null);
+  // Birden fazla adımın açık kalabilmesi için liste halinde tutulur
+  const [expandedSteps, setExpandedSteps] = useState([]);
   const [touchedCard, setTouchedCard] = useState(null);
 
   useEffect(() => {
@@ -136,7 +137,11 @@ export default function Services() {
   };
 
   const toggleStep = (stepId) => {
-    setExpandedStep(expandedStep === stepId ? null : stepId);
+    setExpandedSteps((prev) =>
+      prev.includes(stepId)
+        ? prev.filter((id) => id !== stepId)
+        : [...prev, stepId]
+    );
   };
 
   return (
@@ -180,7 +185,7 @@ export default function Services() {
             <div
               key={step.id}
               className={`process-timeline-item ${
-                expandedStep === step.id ? "expanded" : ""
+                expandedSteps.includes(step.id) ? "expanded" : ""
               }`}
               ref={addToProcessRefs}
               onClick={() => toggleStep(step.id)}
