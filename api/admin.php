@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-$ADMIN_PASSWORD = "sifre_giriniz"; // Örn: Baarch2025*
+$ADMIN_PASSWORD = "sifre_giriniz"; // 
 
 // ---- LOGIN EKRANI ----
 if (!isset($_SESSION["logged"]) || $_SESSION["logged"] !== true) {
